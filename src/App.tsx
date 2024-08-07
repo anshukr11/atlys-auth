@@ -1,26 +1,43 @@
+// App.tsx
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import Login from './components/Login/Login';
+import PostFeed from './components/PostFeed/PostFeed';
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
+import SignUp from './components/Signup/Signup';
+import useAuth from './hooks/useAuth';
 
-function App() {
+const App: React.FC = () => {
+  const { isAuthenticated, login, logout, signUp } = useAuth();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div className="min-h-screen bg-[#141318] text-white">
+        <Routes>
+          <Route 
+            path="/" 
+            element={isAuthenticated ? <Navigate to="/feed" replace /> : <Navigate to="/login" replace />} 
+          />
+          <Route 
+            path="/login" 
+            element={isAuthenticated ? <Navigate to="/feed" replace /> : <Login onLogin={login} />} 
+          />
+          <Route 
+            path="/signup" 
+            element={isAuthenticated ? <Navigate to="/feed" replace /> : <SignUp onSignUp={signUp} />} 
+          />
+          <Route 
+            path="/feed" 
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <PostFeed onLogout={logout} isAuthenticated={isAuthenticated} />
+              </ProtectedRoute>
+            } 
+          />
+        </Routes>
+      </div>
+    </Router>
   );
-}
+};
 
 export default App;
