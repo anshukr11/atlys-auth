@@ -3,20 +3,55 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { SignUpProps } from './interface';
 
-
 const SignUp: React.FC<SignUpProps> = ({ onSignUp, onLogin, isModal = false }) => {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  
+  const [emailError, setEmailError] = useState('');
+  const [usernameError, setUsernameError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
+  const validate = (): boolean => {
+    let isValid = true;
+    setEmailError('');
+    setUsernameError('');
+    setPasswordError('');
+
+    if (!email) {
+      setEmailError('Email is required');
+      isValid = false;
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      setEmailError('Email is invalid');
+      isValid = false;
+    }
+
+    if (!username) {
+      setUsernameError('Username is required');
+      isValid = false;
+    }
+
+    if (!password) {
+      setPasswordError('Password is required');
+      isValid = false;
+    } else if (password.length < 6) {
+      setPasswordError('Password must be at least 6 characters long');
+      isValid = false;
+    }
+
+    return isValid;
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSignUp && onSignUp();
+    if (validate()) {
+      onSignUp && onSignUp();
+    }
   };
 
   const renderFooter = () => {
@@ -52,9 +87,10 @@ const SignUp: React.FC<SignUpProps> = ({ onSignUp, onLogin, isModal = false }) =
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 bg-[#27292d] border border-[#35373B] rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={`w-full px-3 py-2 bg-[#27292d] border ${emailError ? 'border-red-500' : 'border-[#35373B]'} rounded focus:outline-none focus:ring-2 focus:ring-blue-500`}
               placeholder="Enter your email"
             />
+            {emailError && <p className="text-red-500 text-sm">{emailError}</p>}
           </div>
           <div className="mb-4">
             <label htmlFor="username" className="block mb-2">Username</label>
@@ -63,9 +99,10 @@ const SignUp: React.FC<SignUpProps> = ({ onSignUp, onLogin, isModal = false }) =
               id="username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full px-3 py-2 bg-[#27292d] border border-[#35373B] rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={`w-full px-3 py-2 bg-[#27292d] border ${usernameError ? 'border-red-500' : 'border-[#35373B]'} rounded focus:outline-none focus:ring-2 focus:ring-blue-500`}
               placeholder="Choose a preferred username"
             />
+            {usernameError && <p className="text-red-500 text-sm">{usernameError}</p>}
           </div>
           <div className="mb-6 relative">
             <label htmlFor="password" className="block mb-2">Password</label>
@@ -74,9 +111,10 @@ const SignUp: React.FC<SignUpProps> = ({ onSignUp, onLogin, isModal = false }) =
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 bg-[#27292d] border border-[#35373B] rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={`w-full px-3 py-2 bg-[#27292d] border ${passwordError ? 'border-red-500' : 'border-[#35373B]'} rounded focus:outline-none focus:ring-2 focus:ring-blue-500`}
               placeholder="Choose a strong password"
             />
+            {passwordError && <p className="text-red-500 text-sm">{passwordError}</p>}
             <div 
               onClick={toggleShowPassword} 
               className="absolute top-[2.8rem] right-0 pr-3 flex items-center cursor-pointer"

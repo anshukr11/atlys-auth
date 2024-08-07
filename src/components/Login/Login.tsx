@@ -7,14 +7,39 @@ const Login: React.FC<LoginProps> = ({ onLogin , onSignUp, isModal = false }) =>
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [errors, setErrors] = useState<{ email?: string, password?: string }>({});
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
+  const validate = () => {
+    const newErrors: { email?: string, password?: string } = {};
+
+    if (!email) {
+      newErrors.email = 'Email is required.';
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      newErrors.email = 'Email address is invalid.';
+    }
+
+    if (!password) {
+      newErrors.password = 'Password is required.';
+    } else if (password.length < 6) {
+      newErrors.password = 'Password must be at least 6 characters.';
+    }
+
+    return newErrors;
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onLogin();
+    const newErrors = validate();
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+    } else {
+      setErrors({});
+      onLogin();
+    }
   };
 
   const renderFooter = () => {
@@ -22,14 +47,14 @@ const Login: React.FC<LoginProps> = ({ onLogin , onSignUp, isModal = false }) =>
       <p className="mt-4 text-[#7e8084] flex">
         Not registered yet? 
         { isModal ?
-          <p className="text-[#97999d] cursor-pointer ml-2" onClick={onSignUp}>
+          <span className="text-[#97999d] cursor-pointer ml-2" onClick={onSignUp}>
             Register →
-          </p>
+          </span>
         : 
         <Link to="/signup" className="text-[#97999d] ml-2">Register →</Link>}
       </p>
-    )
-  }
+    );
+  };
 
   return (
     <motion.div
@@ -50,9 +75,10 @@ const Login: React.FC<LoginProps> = ({ onLogin , onSignUp, isModal = false }) =>
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 bg-[#27292d] border border-[#35373B] rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={`w-full px-3 py-2 bg-[#27292d] border border-[#35373B] rounded focus:outline-none focus:ring-2 ${errors.email ? 'border-red-500' : 'focus:ring-blue-500'}`}
               placeholder="Enter your email or username"
             />
+            {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
           </div>
           <div className="mb-6 relative">
             <div className='flex justify-between'>
@@ -64,15 +90,16 @@ const Login: React.FC<LoginProps> = ({ onLogin , onSignUp, isModal = false }) =>
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 bg-[#27292d] border border-[#35373B] rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={`w-full px-3 py-2 bg-[#27292d] border border-[#35373B] rounded focus:outline-none focus:ring-2 ${errors.password ? 'border-red-500' : 'focus:ring-blue-500'}`}
               placeholder="Enter your password"
             />
             <div 
               onClick={toggleShowPassword} 
               className="absolute top-[2.6rem] right-0 pr-3 flex items-center cursor-pointer"
             >
-            <img src='/eye.svg' width={20} height={20} alt='eye icon' />
-      </div>
+              <img src='/eye.svg' width={20} height={20} alt='eye icon' />
+            </div>
+            {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
           </div>
           <button
             type="submit"
