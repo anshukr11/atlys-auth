@@ -15,7 +15,7 @@ interface PostFeedProps {
 
 const PostFeed: React.FC<PostFeedProps> = ({ onLogout, isAuthenticated }) => {
   const [newPostContent, setNewPostContent] = useState('');
-  const [posts, setPosts] = useState<Post[]>([
+  const [posts] = useState<Post[]>([
     {
       id: 1,
       author: 'Theresa Webb',

@@ -1,46 +1,63 @@
-# Getting Started with Create React App
+# Atlys Authentication Project
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is a React application with TypeScript and Tailwind CSS, focusing on user authentication and routing.
 
-## Available Scripts
+## Project Structure
 
-In the project directory, you can run:
+The project appears to have the following structure:
 
-### `npm start`
+```
+atlys-authp/
+├── src/
+│   ├── common/
+│   │   └── Modal/
+│   ├── components/
+│   │   ├── Home/
+│   │   ├── Login/
+│   │   ├── PostFeed/
+│   │   ├── ProtectedRoute/
+│   │   └── Signup/
+│   └── hooks/
+├── public/
+├── App.tsx
+├── index.tsx
+└── ...
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Features
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- User authentication (login, logout, signup)
+- Protected routes
+- Feed page for authenticated users
 
-### `npm test`
+## Main Components
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- `App`: The main component that sets up routing and authentication state
+- `Home`: Likely the landing page
+- `Login`: Handles user login
+- `Signup`: Handles user registration
+- `PostFeed`: Displays content for authenticated users
+- `ProtectedRoute`: A wrapper component to secure routes that require authentication
 
-### `npm run build`
+## Authentication
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+The project uses a custom `useAuth` hook to manage authentication state and related functions.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Routing
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+React Router is used for navigation. The main routes are:
 
-### `npm run eject`
+- `/`: Home page
+- `/login`: Login page
+- `/signup`: Signup page
+- `/feed`: Protected route for authenticated users
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Styling
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Tailwind CSS is used for styling, as evidenced by the Tailwind class names in the code.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Getting Started
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+1. Clone the repository
+2. Install dependencies: `npm install` or `yarn`
+3. Run the development server: `npm start` or `yarn start`
